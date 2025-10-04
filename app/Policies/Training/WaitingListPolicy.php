@@ -24,7 +24,8 @@ class WaitingListPolicy
 
     public function addAccounts(Account $account, WaitingList $waitingList)
     {
-        return $this->checkHasPermissionForList($account, $waitingList, ['waiting-lists.add-accounts.%s']);
+        return ! $waitingList->isAtCapacity() &&
+            $this->checkHasPermissionForList($account, $waitingList, ['waiting-lists.add-accounts.%s']);
     }
 
     public function addAccountsAdmin(Account $account, WaitingList $waitingList)
@@ -49,7 +50,7 @@ class WaitingListPolicy
 
     public function update(Account $account, WaitingList $waitingList)
     {
-        return false;
+        return $this->checkHasPermissionForList($account, $waitingList, ['waiting-lists.admin.%s']);
     }
 
     public function delete(Account $account, WaitingList $waitingList)
